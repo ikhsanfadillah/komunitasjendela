@@ -1,10 +1,10 @@
 <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
     <div class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center">
-        <a class="navbar-brand brand-logo" href="index.html">
-            <img src="images/logo.svg" alt="logo" />
+        <a class="navbar-brand brand-logo" href="{{ route('home') }}" style="align-items: center">
+            <img src="{{ asset('images/logo-mini.png')}}" alt="logo" style="height:inherit"/>
         </a>
-        <a class="navbar-brand brand-logo-mini" href="index.html">
-            <img src="images/logo-mini.svg" alt="logo" />
+        <a class="navbar-brand brand-logo-mini" href="{{ route('home') }}">
+            <img src="{{ asset('images/logo-mini2.png')}}" alt="logo" />
         </a>
     </div>
     <div class="navbar-menu-wrapper d-flex align-items-center">
@@ -24,6 +24,12 @@
             </li>
         </ul>
         <ul class="navbar-nav navbar-nav-right">
+            <li class="nav-item ">
+                <a class="nav-link " id="messageDropdown" href="#"
+                   aria-expanded="false" data-toggle="modal" data-target="#attendanceModal">
+                    <i class="mdi mdi-timer"></i>
+                </a>
+            </li>
             <li class="nav-item dropdown">
                 <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-toggle="dropdown"
                     aria-expanded="false">
@@ -40,7 +46,7 @@
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item preview-item">
                         <div class="preview-thumbnail">
-                            <img src="images/faces/face4.jpg" alt="image" class="profile-pic">
+                            <img src="{{ asset('images/faces/face4.jpg')}}" alt="image" class="profile-pic">
                         </div>
                         <div class="preview-item-content flex-grow">
                             <h6 class="preview-subject ellipsis font-weight-medium text-dark">David Grey
@@ -54,7 +60,7 @@
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item preview-item">
                         <div class="preview-thumbnail">
-                            <img src="images/faces/face2.jpg" alt="image" class="profile-pic">
+                            <img src="{{ asset('images/faces/face2.jpg')}}" alt="image" class="profile-pic">
                         </div>
                         <div class="preview-item-content flex-grow">
                             <h6 class="preview-subject ellipsis font-weight-medium text-dark">Tim Cook
@@ -68,7 +74,7 @@
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item preview-item">
                         <div class="preview-thumbnail">
-                            <img src="images/faces/face3.jpg" alt="image" class="profile-pic">
+                            <img src="{{ asset('images/faces/face3.jpg')}}" alt="image" class="profile-pic">
                         </div>
                         <div class="preview-item-content flex-grow">
                             <h6 class="preview-subject ellipsis font-weight-medium text-dark"> Johnson
@@ -141,8 +147,8 @@
             <li class="nav-item dropdown d-none d-xl-inline-block">
                 <a class="nav-link dropdown-toggle" id="UserDropdown" href="#" data-toggle="dropdown"
                     aria-expanded="false">
-                    <span class="profile-text">Hello, Richard V.Welsh !</span>
-                    <img class="img-xs rounded-circle" src="images/faces/face1.jpg" alt="Profile image">
+                    <span class="profile-text">Hello, {{ Auth::user()->name }} !</span>
+                    <img class="img-xs rounded-circle " src="{{ asset('images/faces/boy.png')}}" alt="Profile image">
                 </a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
                     <a class="dropdown-item p-0">
@@ -168,9 +174,13 @@
                     <a class="dropdown-item">
                         Check Inbox
                     </a>
-                    <a class="dropdown-item">
+                    <a class="dropdown-item" href="{{ route('logout') }}"
+                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         Sign Out
                     </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                    </form>
                 </div>
             </li>
         </ul>
@@ -180,3 +190,39 @@
         </button>
     </div>
 </nav>
+
+<!-- Modal -->
+<div class="modal fade" id="attendanceModal" tabindex="-1" role="dialog" aria-labelledby="attendanceModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+        <div class="modal-content border-0">
+            <div class="modal-header text-white">
+                <h5 class="modal-title" id="attendanceModalTitle">Absen</h5>
+                <button type="button" class="close text-white" style="opacity:0.9;" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="mdi mdi-close"></span>
+                </button>
+            </div>
+            <div class="modal-body ">
+                <h3 class="liveClock text-center"></h3>
+                <div class="text-center">
+                    <button type="button" class="btn btn-primary">Absen sekarang</button>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function($) {
+        liveClock = $(".liveClock");
+        setInterval(function() {
+            var date = new Date(),
+                time = date.toLocaleTimeString();
+            liveClock.html(time);
+        }, 1000);
+    });
+</script>
+
+
