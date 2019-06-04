@@ -11,17 +11,17 @@
     <link rel="stylesheet" href="{{ asset('vendors/iconfonts/mdi/css/materialdesignicons.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendors/css/vendor.bundle.base.css') }}">
     <link rel="stylesheet" href="{{ asset('vendors/css/vendor.bundle.addons.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- endinject -->
-
     <!-- plugin css for this page -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.css">
     <script src="{{ asset('vendors/js/vendor.bundle.base.js') }}"></script>
     <script src="{{ asset('vendors/js/vendor.bundle.addons.js') }}"></script>
     <!-- End plugin css for this page -->
     <!-- inject:css -->
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ mix('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendors/toastjs/toast.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendors/toastjs/toast.css') }}">
     <!-- endinject -->
     <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}"/>
     {{-- <link rel="shortcut icon" href="{{ asset('assets/img/favicon.ico') }}"> --}}
@@ -29,21 +29,7 @@
 </head>
 
 <body>
-    <div class="position-absolute w-100 d-flex flex-column p-4">
-        <div class="toast ml-auto show" role="alert">
-            <div class="toast-header">
-                Header content...
-                <button type="button" class="close" data-dismiss="toast">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="toast-body">
-                Body content...
-            </div>
-        </div>
-    </div>
     <div class="container-scroller">
-
         <!-- NAVBAR TOP -->
         @include('partials._navbar')
         <!-- NAVBAR TOP ENDS -->
@@ -85,6 +71,8 @@
     <script src="{{ asset('js/off-canvas.js') }}"></script>
     <script src="{{ asset('js/misc.js') }}"></script>
     <script src="{{ asset('js/main.js') }}"></script>
+
+
     <!-- endinject -->
 
     <!-- Custom js for this page-->
@@ -99,22 +87,23 @@
         var alertMessage = "{{ Session::get('alert-message') }}";
         var alertColor = "";
         var alertIcon = "";
-        alertType = "success";
         switch (alertType) {
             case "success" : alertColor = "green"; alertIcon = "mdi mdi-check"; break;
             case "danger" : alertColor = "red"; alertIcon = "mdi mdi-block-helper"; break;
             case "warning" : alertColor = "yellow"; alertIcon = "mdi mdi-alert"; break;
             case "info" : alertColor = "blue"; alertIcon = "mdi mdi-information-variant";
         }
-        iziToast.show({
-            message: alertMessage || "lorem ipsu lordor man izac tasha",
-            timeout: 3000,
-            theme: 'dark',
-            color: alertColor,
-            icon: alertIcon,
-            transitionIn: 'bounceInUp',
-            transitionOut: 'fadeOutLeft'
-        });
+        if(alertType){
+            iziToast.show({
+                message: alertMessage || "lorem ipsu lordor man izac tasha",
+                timeout: 5000,
+                theme: 'dark',
+                color: alertColor,
+                icon: alertIcon,
+                transitionIn: 'bounceInUp',
+                transitionOut: 'fadeOutLeft'
+            });
+        }
     </script>
     <!-- End custom js for this page-->
 </body>

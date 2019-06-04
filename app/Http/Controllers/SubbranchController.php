@@ -103,7 +103,7 @@ class SubbranchController extends Controller
     {
         $vUserData = $request->validate([
             'name' => 'required|max:50',
-            'subbranch_id' => 'required|exists:subbranchs,id'
+            'branch_id' => 'required|exists:subbranches,id'
         ],[
             'subbranch_id.required' => "You have to choose the Branch that live in",
             'subbranch_id.exists' => "The Branch does not exists",
@@ -114,12 +114,15 @@ class SubbranchController extends Controller
             Subbranch::find($id)->update($vUserData);
             DB::commit();
             $request->session()->flash('status', 'Successfully Update Subbranch!');
-            return redirect()->route('admin.subbranch.index');
+            return redirect()->route('admin.subbranch.index')->with([
+                'alert-type' => 'success',
+                'alert-message' => 'Successfully Update Subbranch!']);
         }
         catch (Exception $e){
             DB::rollback();
             return $e->getMessage();
         }
+        dd("test");
         return back();
     }
 

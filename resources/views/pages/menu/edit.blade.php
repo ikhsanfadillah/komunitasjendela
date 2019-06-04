@@ -2,10 +2,13 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{asset('vendors/nestable/nestable.css')}}">
+    <link rel="stylesheet" href="{{asset('vendors/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css')}}">
 @endsection
 
 @section('scripts')
     <script src="{{asset('vendors/nestable/jquery.nestable.js')}}"></script>
+    <script src="{{asset('vendors/bootstrap-select-1.13.9/dist/js/bootstrap-select.min.js')}}"></script>
+    <script src="{{asset('vendors/bootstrap-select-1.13.9/dist/js/i18n/defaults-id_ID.js')}}"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -40,7 +43,7 @@
                 }
             });
             $(document).on('click','.createMenuItem',function () {
-                $('#menuModal .modal-title').html('Create Menu Item');
+                $('#menuModal .modal-title').html('Add Menu Item');
                 $('#menuModal form')[0].reset();
                 $('#menuModal #inpMethod').val('POST');
                 $('#menuModal').modal('show');
@@ -86,7 +89,7 @@
                         <h4 class="card-title d-inline-block">Menu Builder</h4>
                         <a href="#menuModal" class="btn btn-primary btn-sm  d-inline-block float-right text-white" data-toggle="modal"><span
                                     class="mdi mdi-plus .d-block d-sm-none"></span>
-                            <span class="d-none d-sm-block createMenuItem">Create Menu Item</span> </a>
+                            <span class="d-none d-sm-block createMenuItem">Add Menu Item</span> </a>
                         <div class="dd" id="nestable">
                             {!! $menu !!}
                         </div>
@@ -100,12 +103,13 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
             <form class="modal-content border-0 form-horizontal" role="form" action="{{route('admin.menu-builder.store')}}" method="POST">
                 <div class="modal-header text-white">
-                    <h5 class="modal-title" id="menuModalTitle"><!-- Generate Title When Click the trigger button --></h5>
+                    <h5 class="modal-title"></h5>
                     <button type="button" class="close text-white" style="opacity:0.9;" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true" class="mdi mdi-close"></span>
                     </button>
                 </div>
-                <div class="modal-body ">
+                <div class="modal-body">
+                    <input type="hidden" name="master_menu_id" value="{{$mMasterMenu->id}}">
                     <input id="inpMethod" type="hidden" name="_method" value="POST">
                     @csrf
                     <div class="form-group">
@@ -114,12 +118,21 @@
                     </div>
                     <div class="form-group">
                         <label for="label" class="col-12 control-label">Icon |
-                            <a href="https://materialdesignicons.com/cdn/2.0.46/"><small><i class="mdi mdi-search-web"></i>find the icon here</small></a></label>
-                        <input id="inptIcon" type="text" name="icon" class="form-control" placeholder="e.g : mdi mdi-pencil">
+                            <a href="https://materialdesignicons.com/cdn/2.0.46/" target="_blank"><i class="mdi mdi-material-ui"></i> Material Design</a>
+                            <a href="https://fontawesome.com/v4.7.0/icons/" target="_blank"><i class="fa fa-flag"></i> Font Awesome</a>
+                        </label>
+                        <input id="inptIcon" type="text" name="icon" class="form-control" placeholder="e.g : mdi mdi-pencil or fa fa-pencil">
                     </div>
                     <div class="form-group">
-                        <label for="url" class="col-12 control-label">Route name</label>
-                        <input id="inpRoute" type="text" name="route" class="form-control">
+                        <label for="inpRoute" class="col-12 control-label">Route name</label>
+                        <select id="inpRoute" name="route" class="form-control">
+                            <option value=""></option>
+                            <?php foreach (\Route::getRoutes() as $route) {
+                                if(strpos($route->getName(),'admin') !== false) { ?>
+                                    <option value="{{ $route->getName() }}" data-tokens="ketchup mustard"> {{$route->getName()}} </option>
+                                <?php }
+                            } ?>
+                        </select>
                     </div>
                     <div class="form-group text-right">
                         <button type="reset" class="btn btn-sm btn-secondary">Reset</button>
@@ -133,7 +146,7 @@
     <!-- Delete item Modal -->
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <form class="modal-content border-0 form-horizontal" action="" method="POST">
+            <form class="modal-content border-0 form-horizontal" action="{{route("admin.menu-builder.destroy",['id'=>0])}}" method="POST">
                 @method('DELETE')
                 @csrf
                 <input type="hidden" name="delete_id" id="inpDelete" value=""/>

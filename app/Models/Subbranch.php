@@ -9,7 +9,6 @@ class Subbranch extends Model
 {
     use SoftDeletes;
     public $timestamps = false;
-
     protected $fillable = [
         'name','branch_id'
     ];

@@ -57,8 +57,8 @@
 
 /* === Import Bootstrap functions and variables === */
 
-@import "../node_modules/bootstrap/scss/functions";
-@import "../node_modules/bootstrap/scss/variables";
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
 /*-------------------------------------------------------------------*/
 
 /* === Import template variables === */
@@ -68,13 +68,13 @@
 
 /* === SCSS Compass Functions === */
 
-@import "../node_modules/compass-mixins/lib/compass";
-@import "../node_modules/compass-mixins/lib/animate";
+@import "~compass-mixins/lib/compass";
+@import "~compass-mixins/lib/animate";
 /*-------------------------------------------------------------------*/
 
 /* === Boostrap Main SCSS === */
 
-@import "../node_modules/bootstrap/scss/bootstrap";
+@import "~bootstrap/scss/bootstrap";
 /*-------------------------------------------------------------------*/
 
 /* === Template mixins === */
@@ -125,3 +125,31 @@
 
 @import "landing-screens/auth";
 @import "landing-screens/error";
+
+.dropdown-item{
+  padding: .9rem 1.15rem;
+}
+.table-navigation{
+  
+}
+.dropdown-menu{
+  padding: 0;
+}
+
+table>tbody .form-check .form-check-label input:checked + .input-helper:after{
+  line-height: 2px;
+}
+
+.tableFixHead    {
+  overflow-y: auto;
+  height: 100px;
+  th {
+    position: sticky;
+    top: 0;
+    font-weight: 600;
+    z-index: 50;
+    background:#fbfefe;
+    border-bottom: 1px solid #f1f1f1;
+  }
+}
+

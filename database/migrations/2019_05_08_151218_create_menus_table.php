@@ -18,8 +18,8 @@ class CreateMenusTable extends Migration
             $table->unsignedInteger('parent_id')->default(0);
             $table->unsignedSmallInteger('master_menu_id');
             $table->string('text');
-            $table->string('route');
-            $table->string('icon');
+            $table->string('route')->nullable();
+            $table->string('icon')->nullable();
             $table->integer('sort')->default(0);
             $table->softDeletes();
 

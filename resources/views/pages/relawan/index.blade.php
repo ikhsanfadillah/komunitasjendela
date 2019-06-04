@@ -3,6 +3,35 @@
 ====================--}}
 @extends('layouts.admin')
 
+@section('styles')
+    <style>
+        .nav.nav-tabs{
+            border-bottom-width: 1px;
+            padding: 0 1.5rem;
+            font-weight: 700;
+        }
+        .card-header{
+            padding: 0;
+            border: none;
+            border-radius: 10px 10px 0 0 !important;
+        }
+        .nav-tabs .nav-link{
+            border: none;
+            padding: 1rem 1.5rem;
+        }
+        .nav-link:hover{
+            border: none;
+        }
+        a.nav-link{
+            color: #9a9a9a;
+        }
+        .nav-tabs .nav-link.active{
+            border: none;
+            border-bottom: 2px solid #308ee0;
+        }
+    </style>
+@endsection
+
 @section('content')
     <div class="content-wrapper">
         <div class="row">
@@ -12,59 +41,26 @@
 
             <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title d-inline-block">List Relawan</h4>
-                        <a href="{{Route('admin.relawan.create')}}" class="btn btn-primary btn-sm  d-inline-block float-right text-white">
+                    <div id="myTab" role="tablist" class="card-header" style="background-color: white">
+                        <ul class="nav nav-tabs text-uppercase">
+                            <li class="nav-item">
+                                <a class="nav-link active"  id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Volunteer list</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link " id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">create new</a>
+                            </li>
+                        </ul>
+                        <a href="{{Route('admin.relawan.create')}}" class="btn btn-primary btn-sm  d-none float-right text-white">
                             <i class="mdi mdi-account-plus"></i> Create Relawan </a>
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                <tr>
-                                    <th>
-                                        User
-                                    </th>
-                                    <th>
-                                        Name
-                                    </th>
-                                    <th>
-                                        Email
-                                    </th>
-                                    <th>
-                                        Birthdate
-                                    </th>
-                                    <th>
-                                        Join Date
-                                    </th>
-                                    <th>
-                                        action
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($mRelawans as $i => $mRelawan)
-                                    <tr>
-                                        <td class="py-1">
-                                            @if($mRelawan->detail()->exists())
-                                                <img src="{{ asset('images/faces/'.($mRelawan->detail->gender == App\Models\User::GENDER_MALE ? "boy" : "girl").'.png') }}" class="bg-inverse-dark" alt="image" />
-                                            @else
-                                                <img src="{{ asset('images/faces/boy.png') }}" class="bg-inverse-dark" alt="image" />
-                                            @endif
-                                        </td>
-                                        <td>{{ $mRelawan->name }}</td>
-                                        <td>{{ $mRelawan->email }}</td>
-
-                                        <td>@isset($mRelawan->detail->dob) {{ date('M d, Y', strtotime($mRelawan->detail->dob)) }} @endisset</td>
-                                        <td>@isset($mRelawan->detail->dob) {{ date('M d, Y', strtotime($mRelawan->detail->join_dt)) }} @endisset</td>
-                                        <td>
-                                            <a href="{{route('admin.relawan.edit',['id'=>$mRelawan->id])}}" class="text-dark" style="font-size: 1.7em"><i class="mdi mdi-pencil"></i></a>
-                                            <a href="#" class="text-dark" style="font-size: 1.7em"
-                                               onclick="event.preventDefault(); document.getElementById('delete-user-form').submit();">
-                                                <i class="mdi mdi-delete-empty"></i></a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                @include('pages.relawan.list-relawan',['mRelawans'=>$mRelawans])
+                            </div>
+                            <div class="tab-pane fade " id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                @include('pages.relawan.create-partial');
+                            </div>
                         </div>
                     </div>
                 </div>

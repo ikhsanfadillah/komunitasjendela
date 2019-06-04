@@ -1,6 +1,7 @@
 {{--======================
     Subbranch Section
-====================--}}
+=====================--}}
+
 @extends('layouts.admin')
 
 @section('styles')
@@ -26,10 +27,22 @@
                             @csrf
                             <div class="form-group">
                                 <label for="subbranchName">Name</label>
-                                <input type="text" id="subbranchName" name="name" placeholder="{{ str_replace("+62","",$mSubbranch->detail->name ?? '') }}" value="{{ str_replace("+62","",$mSubbranch->detail->name ?? '') }}"
+                                <input type="text" id="subbranchName" name="name" placeholder="Subbranch name" value="{{ old('name') ?? $mSubbranch->name }}"
                                        class="form-control @if($errors->has('name')) is-invalid @endif">
                                 @if($errors->has('name'))
                                     <div class="invalid-feedback">{{$errors->first('name')}}</div>
+                                @endif
+                            </div>
+                            <div class="form-group">
+                                <label for="relawanBranch">Branch</label>
+                                <select id="relawanBranch" name="branch_id" class="form-control @if($errors->has('branch_id')) is-invalid @endif">
+                                    <option selected disabled>Choose Location...</option>
+                                    @foreach(App\Models\Branch::All() as $branch)
+                                        <option value="{{ $branch->id }}" {{ (old('branch_id') || $mSubbranch->branch_id == $branch->id ? "selected":"") }}>{{ $branch->name }}</option>
+                                    @endforeach
+                                </select>
+                                @if($errors->has('branch_id'))
+                                    <div class="invalid-feedback">{{$errors->first('branch_id')}}</div>
                                 @endif
                             </div>
                             <button type="submit" class="btn btn-success mr-2">Submit</button>

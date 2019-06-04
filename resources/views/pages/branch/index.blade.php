@@ -41,16 +41,23 @@
                                                onclick="event.preventDefault(); document.getElementById('delete-user-form').submit();">
                                                 <i class="mdi mdi-delete-empty"></i></a>
 
-                                            <form id="delete-user-form" action="{{ route('admin.branch.destroy',$mBranch->id) }}" method="POST" style="display: none;">
-                                                @method('DELETE')
-                                                @csrf
-                                            </form>
+
                                             <div class="dropdown d-inline-block">
                                                 <a class="text-dark" data-offset="30" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <i class="mdi mdi-dots-horizontal"></i>
                                                 </a>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" >
-                                                    <a class="dropdown-item" href="{{ route('admin.subbranch.create',['branch_id'=>$mBranch->id]) }}"><i class="mdi mdi-plus"></i> Create subbranch</a>
+                                                    <a class="dropdown-item" href="{{ route('admin.subbranch.create',['branch_id'=>$mBranch->id]) }}">
+                                                        <i class="mdi mdi-plus"></i> Create subbranch</a>
+                                                    <a class="dropdown-item" href="{{ route('admin.branch.edit',['id'=>$mBranch->id]) }}">
+                                                        <i class="mdi mdi-pencil"></i> Edit Branch</a>
+                                                    <a class="dropdown-item" href="{{ route('admin.subbranch.create',['branch_id'=>$mBranch->id]) }}"
+                                                       onclick="event.preventDefault(); document.getElementById('delete-user-form').submit();">
+                                                        <i class="mdi mdi-delete-empty"></i> Delete Branch</a>
+                                                    <form id="delete-user-form" action="{{ route('admin.branch.destroy',$mBranch->id) }}" method="POST" style="display: none;">
+                                                        @method('DELETE')
+                                                        @csrf
+                                                    </form>
                                                 </div>
                                             </div>
                                         </td>
@@ -65,3 +72,4 @@
         </div>
     </div>
 @endsection
+

@@ -3,17 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\MasterMenu;
+//use App\Models\Flashmessage;
 use App\Models\Menu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use mysql_xdevapi\Exception;
-
 class MenuController extends Controller
 {
     public function index()
     {
         $mMasterMenus 	= MasterMenu::all();
         return view('pages.menu.index', array('mMasterMenus'=>$mMasterMenus));
+    }
+
+    public function create(){
+        return view('pages.menu.create');
     }
 
     public function edit($id)
@@ -60,10 +64,10 @@ class MenuController extends Controller
 
     public function store(Request $request)
     {
-        dd("post");
         DB::beginTransaction();
         try{
             $item = new Menu;
+            $item->master_menu_id = $request->master_menu_id;
             $item->text 	= $request->text ?: 'untitled';
             $item->icon 	= $request->icon;
             $item->route 	= $request->route;
@@ -76,7 +80,9 @@ class MenuController extends Controller
             return $e->getMessage();
 
         }
-        return redirect()->route('admin.menu-builder.index');
+        return redirect()->route('admin.menu-builder.edit',['id'=>$item->master_menu_id])
+            ->with(['alert-type' => 'success',
+                'alert-message' => 'Successfully Add Menu Item!']);
     }
 
     public function update(Request $request, $id)
@@ -86,7 +92,7 @@ class MenuController extends Controller
             $item = Menu::find($id);
             $item->text 	= $request->text ?: 'untitled';
             $item->icon 	= $request->icon;
-            $item->route 	= $request->route;
+            $item->route 	= $request->route ?: 'admin.default';
 
             $item->save();
             DB::commit();
@@ -96,10 +102,9 @@ class MenuController extends Controller
             return $e->getMessage();
 
         }
-
-        return redirect()->route('admin.menu-builder.index');
-
-        return Redirect::to("admin/menu/edit/{$id}");
+        return redirect()->route('admin.menu-builder.edit',['id'=>$item->master_menu_id])
+            ->with(['alert-type' => 'success',
+                'alert-message' => 'Successfully Add Menu Item!']);
     }
 
     public function destroy($id)
@@ -120,7 +125,7 @@ class MenuController extends Controller
             DB::rollback();
             return $e->getMessage();
         }
-
-        return redirect()->route('admin.menu-builder.index');
+        return redirect()->route('admin.menu-builder.edit',['id'=>$item->master_menu_id])
+            ->with($this->flashMessage('success','Successfully Delete Menu Item!'));
     }
 }

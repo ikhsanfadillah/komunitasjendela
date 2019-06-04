@@ -32,7 +32,7 @@
                             <label for="relawanBranch">Branch</label>
                             <select id="relawanBranch" name="branch_id" class="form-control @if($errors->has('branch_id')) is-invalid @endif">
                                 <option selected disabled>Choose Location...</option>
-                                @foreach(App\Branch::All() as $branch)
+                                @foreach(App\Models\Branch::All() as $branch)
                                     <option value="{{ $branch->id }}" {{ (old('branch_id') || isset($_GET['branch_id']) == $branch->id ? "selected":"") }}>{{ $branch->name }}</option>
                                 @endforeach
                             </select>
