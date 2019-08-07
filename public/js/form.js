@@ -11,4 +11,6 @@
     };
     var test = $('.flatpickr-single').flatpickr(FLATPICKER_CONFIG.SINGLE);
   });
+
+
 })(jQuery);

@@ -80,7 +80,7 @@
 
     <div class="form-group">
         <label for="relawanCity">City</label>
-        <select id="relawanCity" name="city_id" class="form-control @if($errors->has('city_id')) is-invalid @endif">
+        <select data-live-search="true" title="Subbranch..." id="relawanCity" name="city_id" class="selectpicker form-control @if($errors->has('city_id')) is-invalid @endif">
             <option selected disabled>Choose Location...</option>
             @foreach(App\Models\City::All() as $city)
                 <option value="{{ $city->id }}" {{ (old('city_id') == $city->id ? "selected":"") }}>{{ $city->name }}</option>
@@ -119,8 +119,6 @@
 
         var cleaveNIK = new Cleave('.cleave-nik',{
             numericOnly: true,
-            blocks: [4,4,4,4],
-            delimiters: [" "]
         });
         var cleavePhone = new Cleave('.cleave-phone',{
             numericOnly: true,

@@ -35,7 +35,7 @@
                                     <tr>
                                         <td>{{ $mBranch->id }}</td>
                                         <td class="text-capitalize">{{ $mBranch->name }}</td>
-                                        <td class="text-right" style="font-size: 1.7em">
+                                        <td class="text-right" style="">
                                             <a href="{{ route('admin.branch.edit',['id'=>$mBranch->id])}}" class="text-dark"><i class="mdi mdi-pencil"></i></a>
                                             <a href="#" class="text-dark"
                                                onclick="event.preventDefault(); document.getElementById('delete-user-form').submit();">

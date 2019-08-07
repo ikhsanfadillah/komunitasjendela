@@ -29,7 +29,12 @@
 //});
 //Auth::routes();
 //Route::get('/home', 'HomeController@index')->name('home');
+use App\Models\Event;
+
 Route::get('/login2', function () {
     return view('auth.login2');
 })->name('login2');
+Route::post('/volunteer-attendance/self-attending','VolunteerAttendanceController@selfAttending')->name('volunteer-attendance.self-attending');
+Route::get('/attendance/volunteer/{slug}','VolunteerAttendanceController@eventAttend')->name('volunteer-attendance.eventAttend');
+
 

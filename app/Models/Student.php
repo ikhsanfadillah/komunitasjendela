@@ -44,4 +44,7 @@ class Student extends Model
     public function age(){
         return Carbon::parse($this->dob)->age;
     }
+    public function photos(){
+        return $this->morphMany('App\Models\Photo','photoable');
+    }
 }

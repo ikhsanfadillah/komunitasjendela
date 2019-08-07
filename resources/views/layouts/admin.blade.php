@@ -15,9 +15,11 @@
     <!-- endinject -->
     <!-- plugin css for this page -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.css">
-    <script src="{{ asset('vendors/js/vendor.bundle.base.js') }}"></script>
+    <script src="{{ mix('js/app.js') }}"></script>
+    <link rel="stylesheet" href="{{asset('vendors/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css')}}">
+
     <script src="{{ asset('vendors/js/vendor.bundle.addons.js') }}"></script>
-    <!-- End plugin css for this page -->
+<!-- End plugin css for this page -->
     <!-- inject:css -->
     <link rel="stylesheet" href="{{ mix('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
@@ -26,6 +28,8 @@
     <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}"/>
     {{-- <link rel="shortcut icon" href="{{ asset('assets/img/favicon.ico') }}"> --}}
     @yield('styles')
+    <link rel="stylesheet" href="{{ asset('vendors/shed-css/dist/index.css') }}">
+
 </head>
 
 <body>
@@ -60,9 +64,12 @@
     <!-- container-scroller -->
 
     <!-- plugins:js -->
+
     <script src="https://cdn.jsdelivr.net/npm/simplebar@latest/dist/simplebar.min.js"></script>
     <script src="{{ asset('js/moment.min.js') }}"></script>
     <script src="{{ asset('vendors/toastjs/toast.js') }}"></script>
+{{--    <script src="{{asset('vendors/bootstrap-select-1.13.9/dist/js/bootstrap-select.min.js')}}"></script>--}}
+{{--    <script src="{{asset('vendors/bootstrap-select-1.13.9/dist/js/i18n/defaults-id_ID.js')}}"></script>--}}
     <!-- endinject -->
 
     <!-- Plugin js for this page-->
@@ -95,7 +102,7 @@
         }
         if(alertType){
             iziToast.show({
-                message: alertMessage || "lorem ipsu lordor man izac tasha",
+                message: alertMessage || "You have notification",
                 timeout: 5000,
                 theme: 'dark',
                 color: alertColor,

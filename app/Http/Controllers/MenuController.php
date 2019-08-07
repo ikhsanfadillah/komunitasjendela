@@ -70,7 +70,7 @@ class MenuController extends Controller
             $item->master_menu_id = $request->master_menu_id;
             $item->text 	= $request->text ?: 'untitled';
             $item->icon 	= $request->icon;
-            $item->route 	= $request->route;
+            $item->route 	= $request->route ?: 'admin.default';
             $item->sort 	= Menu::max('sort')+1;
             $item->save();
             DB::commit();

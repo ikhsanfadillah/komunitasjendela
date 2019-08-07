@@ -24,12 +24,6 @@
             </li>
         </ul>
         <ul class="navbar-nav navbar-nav-right">
-            <li class="nav-item ">
-                <a class="nav-link " id="messageDropdown" href="#"
-                   aria-expanded="false" data-toggle="modal" data-target="#attendanceModal">
-                    <i class="mdi mdi-timer"></i>
-                </a>
-            </li>
             <li class="nav-item dropdown">
                 <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-toggle="dropdown"
                     aria-expanded="false">
@@ -195,20 +189,32 @@
 <div class="modal fade" id="attendanceModal" tabindex="-1" role="dialog" aria-labelledby="attendanceModalTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
         <div class="modal-content border-0">
-            <div class="modal-header text-white">
-                <h5 class="modal-title" id="attendanceModalTitle">Absen</h5>
-                <button type="button" class="close text-white" style="opacity:0.9;" data-dismiss="modal" aria-label="Close">
+            <div class="modal-header text-white a-i:c">
+                <button type="button" class="close text-white col t-a:l p-0" style="opacity:0.9;" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true" class="mdi mdi-close"></span>
                 </button>
+                <h4 class="modal-title col t-a:c" id="attendanceModalTitle" style="">Attendance</h4>
+                <span class="liveClock col t-a:r p-0" style=""></span>
             </div>
             <div class="modal-body ">
-                <h3 class="liveClock text-center"></h3>
-                <div class="text-center">
-                    <button type="button" class="btn btn-primary">Absen sekarang</button>
-                </div>
+                <form action="{{ route('admin.volunteer-attendance.attend') }}" method="POST" style="min-height: 200px">
+                    @csrf
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Library:</label>
+                        @php
+                            $mSubbranches = \App\Models\Subbranch::all();
+                        @endphp
+                        <select name="subbranch" class="selectpicker form-control" data-container="body" data-size="5" data-live-search="true">
+                            @foreach($mSubbranches as $i => $mSubbranch)
+                                <option value="{{$mSubbranch->id}}">{{$mSubbranch->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">Absen sekarang</button>
+                    </div>
 
-            </div>
-            <div class="modal-footer">
+                </form>
             </div>
         </div>
     </div>

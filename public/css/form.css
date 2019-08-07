@@ -1,6 +1,10 @@
 .flatpickr[readonly="readonly"]{
     background-color: #fff;
 }
+.flatpickr-time{
+    height: inherit;
+    line-height: inherit;
+}
 label.input-toggle {
     line-height: 0;
     font-size: 0;

@@ -50,7 +50,7 @@
                                 <a class="nav-link " id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">create new</a>
                             </li>
                         </ul>
-                        <a href="{{Route('admin.relawan.create')}}" class="btn btn-primary btn-sm  d-none float-right text-white">
+                        <a href="{{route('admin.relawan.create')}}" class="btn btn-primary btn-sm  d-none float-right text-white">
                             <i class="mdi mdi-account-plus"></i> Create Relawan </a>
                     </div>
                     <div class="card-body p-0">

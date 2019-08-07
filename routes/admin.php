@@ -3,12 +3,16 @@
 Route::group(['as' => 'admin.','middleware'=>['auth']], function(){
     Route::get('/dashboard', function () { return view('pages.forms.forms'); })->name('dashboard');
     Route::resource('relawan','RelawanController');
+    Route::post('/relawan/import','RelawanController@import')->name('relawan.import');
     Route::get('/relawan/statistic','RelawanController@statistic')->name('relawan.statistic');
     Route::resource('student','StudentController');
     Route::get('/student/statistic','StudentController@statistic')->name('student.statistic');
     Route::resource('branch','branchController');
     Route::resource('subbranch','SubbranchController');
     Route::resource('student-attendance','StudentAttendanceController');
+    Route::post('/volunteer-attendance/attend','VolunteerAttendanceController@attend')->name('volunteer-attendance.attend');
+    Route::post('/volunteer-attendance/multiple','VolunteerAttendanceController@multiple')->name('volunteer-attendance.multiple');
+    Route::resource('event','EventController');
     Route::resource('volunteer-attendance','VolunteerAttendanceController');
 
     Route::resource('menu-builder','MenuController');

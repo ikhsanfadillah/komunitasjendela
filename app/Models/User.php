@@ -12,6 +12,10 @@ class User extends Authenticatable
 {
     use Notifiable, HasRoles, Userstamps;
 
+    public static $genderList = ['M' => 'Male', 'F' => 'Female'];
+    public const GENDER_MALE = "M";
+    public const GENDER_FEMALE = "F";
+
     protected $softDelete = true;
     /**
      * The attributes that are mass assignable.
@@ -54,17 +58,13 @@ class User extends Authenticatable
         ],$merge);
     }
 
-    public static $genderList = ['M' => 'Male', 'F' => 'Female'];
-    public const GENDER_MALE = "M";
-    public const GENDER_FEMALE = "F";
-
     // Relationships
     public function detail()
     {
         return $this->hasOne('App\Models\UserDetail','user_id','id');
     }
 
-    public function userDetail()
+    public function attendances()
     {
         return $this->hasMany('App\Model\VolunteerAttendance', 'user_id', 'id');
     }
