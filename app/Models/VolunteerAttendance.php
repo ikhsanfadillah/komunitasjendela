@@ -16,33 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $time_out
  * @package App\Models
  */
-class VolunteerAttendance extends Model
+class VolunteerAttendance extends Attendance
 {
-    public $timestamps = false;
 
-    public static function rules($id = false,$merge=[]){
-        return array_merge([
-            'subbranch'      => 'exists:subbranches,id',
-        ],$merge);
-    }
-    /* RELATION SHIP */
-    public function user()
-    {
-        return $this->belongsTo('App\Model\User', 'user_id', 'id');
-    }
-    // Relationships
-    public function volunteer()
-    {
-        return $this->belongsTo('App\Models\User','user_id','id');
-    }
-
-    public function checker()
-    {
-        return $this->belongsTo('App\Models\User', 'checker_id', 'id');
-    }
-
-    public function subbranch()
-    {
-        return $this->belongsTo('App\Models\Subbranch', 'subbranch_id', 'id');
-    }
 }

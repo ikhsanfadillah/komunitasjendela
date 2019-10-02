@@ -26,11 +26,6 @@
             </div>
           </div>
         </div>
-        <button class="btn btn-success btn-block">Buat Post
-          <i class="mdi mdi-plus"></i>
-        </button>
-        <button class="btn btn-warning btn-block" data-toggle="modal" data-target="#attendanceModal">Attend!
-        </button>
       </div>
     </li>
     @php

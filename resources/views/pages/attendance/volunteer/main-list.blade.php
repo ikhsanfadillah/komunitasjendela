@@ -10,8 +10,64 @@
     .pagination{
         margin: 0;
     }
+
+/*    Pindahkan ke scss */
+    .text-yellow{
+        color: gold;
+    }
+    .text-green{
+        color: #06ea20;
+    }
+    .text-red{
+        color: crimson;
+    }
 </style>
 
+<div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalTitle" aria-hidden="true">
+    <form class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document" action="{{ route('admin.volunteer-attendance.index') }}">
+        <div class="modal-content border-0">
+            <div class="modal-header text-white a-i:c">
+                <button type="button" class="close text-white col t-a:l p-0" style="opacity:0.9;" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="mdi mdi-close"></span>
+                </button>
+
+                <button type="submit" class="btn btn-inverse-outline-light border-0 text-white f-w:700">Apply Filter</button>
+            </div>
+            <div class="modal-body bg-white" style="min-width: 200px;">
+                <div class="form-group">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text p-x:.1">
+                                <div class="checkbox">
+                                    <input type="checkbox" id="checkbox_1">
+                                    <label for="checkbox_1"></label>
+                                </div>
+                            </div>
+                        </div>
+                        @php $mSubbranches = \App\Models\Subbranch::all(); @endphp
+                        <select id="relawanCity" name="user" class="selectpicker form-control @if($errors->has('user')) is-invalid @endif"
+                                data-live-search="true" multiple title="Choose Library">
+                            @foreach($mSubbranches as $mSubbranch)
+                                <option value="{{$mSubbranch->id}}">{{$mSubbranch->name}}</option>
+                            @endforeach
+                        </select>
+                        @if($errors->has('user'))
+                            <div class="invalid-feedback">{{$errors->first('user')}}</div>
+                        @endif
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="dateRange">Date Range</label>
+                    <input type="text" id="dateRange" name="dob" placeholder="Date range" value="{{ old('dob') }}"
+                           class="flatpickr flatpickr-range form-control @if($errors->has('dob')) is-invalid @endif">
+                    @if($errors->has('dob'))
+                        <div class="invalid-feedback">{{$errors->first('dob')}}</div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
 <div class="table-navigation d:f a-i:c" style="border-width: 1px 0; border-color: #dee2e6; border-style: solid">
     <form id="searchForm" class="form-inline d-inline-flex ">
         <div class="m-r:.5">
@@ -24,51 +80,6 @@
     <button class="btn-inverse-outline-secondary rounded-circle border-0 text-muted m-r:.5 cur:p" aria-expanded="false" data-toggle="modal" data-target="#filterModal" style=" font-size: 1.2em">
         <span class="mdi mdi-plus"></span>
     </button>
-    <div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalTitle" aria-hidden="true">
-        <form class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document" action="{{ route('admin.volunteer-attendance.index') }}">
-            <div class="modal-content border-0">
-                <div class="modal-header text-white a-i:c">
-                    <button type="button" class="close text-white col t-a:l p-0" style="opacity:0.9;" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true" class="mdi mdi-close"></span>
-                    </button>
-
-                    <button type="submit" class="btn btn-inverse-outline-light border-0 text-white f-w:700">Apply Filter</button>
-                </div>
-                <div class="modal-body bg-white" style="min-width: 200px;">
-                    <div class="form-group">
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text p-x:.1">
-                                    <div class="checkbox">
-                                        <input type="checkbox" id="checkbox_1">
-                                        <label for="checkbox_1"></label>
-                                    </div>
-                                </div>
-                            </div>
-                            @php $mSubbranches = \App\Models\Subbranch::all(); @endphp
-                            <select id="relawanCity" name="user" class="selectpicker form-control @if($errors->has('user')) is-invalid @endif"
-                                    data-live-search="true" multiple title="Choose Library">
-                            @foreach($mSubbranches as $mSubbranch)
-                                <option value="{{$mSubbranch->id}}">{{$mSubbranch->name}}</option>
-                            @endforeach
-                            </select>
-                            @if($errors->has('user'))
-                                <div class="invalid-feedback">{{$errors->first('user')}}</div>
-                            @endif
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="dateRange">Date Range</label>
-                        <input type="text" id="dateRange" name="dob" placeholder="Date range" value="{{ old('dob') }}"
-                               class="flatpickr flatpickr-range form-control @if($errors->has('dob')) is-invalid @endif">
-                        @if($errors->has('dob'))
-                            <div class="invalid-feedback">{{$errors->first('dob')}}</div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
     <div id="actionForm" action="{{ route('admin.volunteer-attendance.index') }}" method="get" style="display: none">
         <form action="" class="d-inline">
             @method('DELETE')
@@ -114,24 +125,31 @@
                             </div>
                         </td>
                         <td>
-                            <b class="text-{{ ($mVolunteerAttendance->status)?'success':'muted' }}">{{ ($mVolunteerAttendance->status)?'Prensent':'Absent' }}</b>
+                            <b class="text-{{ \App\Models\Attendance::$status[$mVolunteerAttendance->status]['color'] }}">
+                                {{ \App\Models\Attendance::$status[$mVolunteerAttendance->status]['text'] }}
+                            </b>
                         </td>
                         <td>{{ $mVolunteerAttendance->volunteer->name }} </td>
-                        <td>{{ $mVolunteerAttendance->checker->name ?? '' }}</td>
-                        <td>{{ $mVolunteerAttendance->subbranch->name }}</td>
+                        <td>{{ $mVolunteerAttendance->checker->name ?? '-' }}</td>
+                        <td>{{ $mVolunteerAttendance->subbranch->name ?? '-' }}</td>
                         <td>{{ $mVolunteerAttendance->date }}</td>
                         <td>{{ $mVolunteerAttendance->time_in }}</td>
                         <td>{{ $mVolunteerAttendance->time_out }}</td>
                         <td>
                             <div class="dropdown d-inline-block">
                                 <a class="text-dark text-center" style="font-size: 1.3em" data-offset="30" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="mdi mdi-dots-horizontal"></i>
+                                    <i class="mdi mdi-dots-vertical"></i>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" >
+                                    <form action="{{ route('admin.volunteer-attendance.checked',$mVolunteerAttendance->id) }}" method="POST">
+                                        @method('PUT')
+                                        @csrf {{ route('admin.volunteer-attendance.checked',$mVolunteerAttendance->id) }}
+                                        <button class="dropdown-item" type="submit"><i class="mdi mdi-check"></i> Checked</button>
+                                    </form>
                                     <form action="{{ route('admin.volunteer-attendance.destroy',$mVolunteerAttendance->id) }}" method="POST">
                                         @method('DELETE')
                                         @csrf
-                                        <button class="dropdown-item" type="submit"><i class="mdi mdi-delete-empty"></i> Deleasdte</button>
+                                        <button class="dropdown-item" type="submit"><i class="mdi mdi-delete-empty"></i> Delete</button>
                                     </form>
                                 </div>
                             </div>

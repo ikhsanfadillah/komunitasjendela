@@ -63,6 +63,7 @@
             <th class="px-1"></th>
             <th>Name</th>
             <th>Email</th>
+            <th>Phone</th>
             <th>Birthdate</th>
             <th>Join Date</th>
             <th></th>
@@ -93,7 +94,7 @@
             </td>
             <td>{{ $mRelawan->name }}</td>
             <td>{{ $mRelawan->email }}</td>
-
+            <td>{{ empty($mRelawan->detail) ? "-" : $mRelawan->detail->phone }}</td>
             <td>@isset($mRelawan->detail->dob) {{ date('M d, Y', strtotime($mRelawan->detail->dob)) }} @endisset</td>
             <td>@isset($mRelawan->detail->dob) {{ date('M d, Y', strtotime($mRelawan->detail->join_dt)) }} @endisset</td>
             <td>

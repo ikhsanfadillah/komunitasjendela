@@ -48,7 +48,7 @@
                                     Volunteer list</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link p-y:0 p-x:1"  id="insert-tab" data-toggle="tab" href="#insert" role="tab" aria-controls="insert" aria-selected="false">
+                                <a class="nav-link p-y:0 p-x:1 "  id="insert-tab" data-toggle="tab" href="#insert" role="tab" aria-controls="insert" aria-selected="false">
                                     Absen manual</a>
                             </li>
                         </ul>

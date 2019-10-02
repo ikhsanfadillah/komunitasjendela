@@ -39,17 +39,18 @@
 
             <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title d-inline-block">List Event</h4>
+                    <div class="card-head px-3 py-2 d:f a-i:c j-c:s-b border-bottom">
+                        <h4 class="card-title d-inline-block m-0">Event List</h4>
                         <a href="{{Route('admin.event.create')}}" class="btn btn-primary btn-sm  d-inline-block float-right text-white">
-                            <i class="mdi mdi-account-plus"></i> Create Event </a>
+                            Create Event </a>
+                    </div>
+                    <div class="card-body p-0">
                         <div class="table-responsive">
                             <table class="table table-striped">
                                 <thead>
                                 <tr>
                                     <th>Name</th>
                                     <th>Slug</th>
-                                    <th>Type</th>
                                     <th>Day</th>
                                     <th>Date</th>
                                     <th>Time</th>
@@ -60,9 +61,20 @@
                                     <tr>
                                         <td>{{ $mEvent->name }}</td>
                                         <td><a href="{{ url('/attendance/volunteer/'.$mEvent->slug) }}">{{ $mEvent->slug }} <i class="fa fa-link"></i></a></td>
-                                        <td>{{ $mEvent->type }}</td>
-                                        <td>{{ $mEvent->day }}</td>
-                                        <td>{{ $mEvent->date }}</td>
+                                        <td>
+                                            @if(!empty($mEvent->day) && $mEvent->day != "null")
+                                                @php
+                                                    $days = array_map(function ($v){
+                                                    $dayNames = \App\Models\Event::$eventDays;
+                                                      return $dayNames[$v];     // add 7
+                                                    } , json_decode($mEvent->day))
+                                                @endphp
+                                                {{ implode(", ",$days) }}
+                                            @else
+                                                {{\Carbon\Carbon::parse($mEvent->date)->format('l')}}
+                                            @endif
+                                            </td>
+                                        <td>{{ $mEvent->date ?: "Weekly" }}</td>
                                         <td>{{ $mEvent->time }}</td>
 
                                         <td>

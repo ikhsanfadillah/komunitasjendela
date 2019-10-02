@@ -37,4 +37,28 @@ Route::get('/login2', function () {
 Route::post('/volunteer-attendance/self-attending','VolunteerAttendanceController@selfAttending')->name('volunteer-attendance.self-attending');
 Route::get('/attendance/volunteer/{slug}','VolunteerAttendanceController@eventAttend')->name('volunteer-attendance.eventAttend');
 
+Route::get('/clear-cache', function() {
+    $exitCode = Artisan::call('cache:clear');
+    return 'Application cache cleared';
+});
+Route::get('/key-generate', function() {
+    $exitCode = Artisan::call('key:generate');
+    return 'Application key generate';
+});
+Route::get('/config-cache', function() {
+    $exitCode = Artisan::call('config:cache');
+    return 'Application config cache';
+});
+Route::get('/view-clear', function() {
+    $exitCode = Artisan::call('view:clear');
+    return 'Application view clear';
+});
+Route::get('/route-clear', function() {
+    $exitCode = Artisan::call('route:clear');
+    return 'Application route clear';
+});
+
+
+
+
 

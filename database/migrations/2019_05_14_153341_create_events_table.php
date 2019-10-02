@@ -17,7 +17,7 @@ class CreateEventsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('slug')->unique();
-            $table->string('description')->unique()->nullable();
+            $table->string('description')->nullable();
             $table->decimal('long', 10, 7)->nullable();
             $table->decimal('lat', 10, 7)->nullable();
             $table->decimal('radius', 3, 3)->nullable();

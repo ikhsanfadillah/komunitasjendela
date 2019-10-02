@@ -12,6 +12,30 @@ class Event extends Model
     protected $fillable = [
         'name', 'slug', 'time_type','day','date','time','description'
     ];
+    public static function rules($id = false,$merge=[]){
+        return array_merge([
+            'name' => "required",
+            'slug' => "required",
+            'latitude' => "required",
+            'longitude' => "required",
+            'time_type' => "required",
+            'day' => "required_if:time_type,==,day",
+            'date' => "required_if:time_type,==,date",
+            'time' => "required",
+            'description' => "nullable"
+        ],$merge);
+    }
+
+
+    public function getLatAttribute($latitude)
+    {
+        return $this->attributes['lat'] = number_format($latitude, 7);
+    }
+    public function getLongAttribute($longitude)
+    {
+        return $this->attributes['long'] = number_format($longitude, 7);
+    }
+
     public function photo(){
         return $this->morphOne('App\Models\Photo','photoable');
     }

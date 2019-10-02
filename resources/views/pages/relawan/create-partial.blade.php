@@ -28,7 +28,7 @@
         @endif
     </div>
 
-    <div class="form-group">
+    <div class="form-group d-none">
         <label for="relawanNIK">NIK</label>
         <input type="text" id="relawanNIK" name="nik" placeholder="NIK" value="{{ old('nik') }}"
                class="cleave-nik form-control @if($errors->has('nik')) is-invalid @endif">
@@ -38,7 +38,7 @@
     </div>
 
     <div class="form-group">
-        <label for="relawanPhone">Phone</label>
+        <label for="relawanPhone">Phone<i class="text-danger">*</i></label>
         <input type="text" id="relawanPhone" name="phone" placeholder="Phone" value="{{ old('phone') }}"
                class="cleave-phone form-control @if($errors->has('phone')) is-invalid @endif">
         @if($errors->has('phone'))

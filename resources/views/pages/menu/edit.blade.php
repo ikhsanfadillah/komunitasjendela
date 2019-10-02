@@ -126,7 +126,7 @@
                     </div>
                     <div class="form-group">
                         <label for="inpRoute" class="col-12 control-label">Route name</label>
-                        <select id="inpRoute" name="route" class="form-control selectpicker dropup " data-live-search="true" title="Subbranch..." data-container="body">
+                        <select id="inpRoute" name="route" class="form-control selectpicker dropup " data-live-search="true" title="Route" data-container="body">
                             <option value=""></option>
                             <?php foreach (\Route::getRoutes() as $route) {
                                 if(strpos($route->getName(),'admin') !== false &&

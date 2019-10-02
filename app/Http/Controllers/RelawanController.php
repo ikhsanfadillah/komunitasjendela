@@ -34,7 +34,7 @@ class RelawanController extends Controller
     public function store(Request $request){
 
         $request->merge([
-            'nik' => str_replace(' ','',$request->nik),
+            'nik' => str_replace(' ','',$request->nik) ?: null,
             'phone' => str_replace(' ','',$request->phone),
             'password' => bcrypt('Jendela'.date('dmy', strtotime($request->dob)))
             ]);

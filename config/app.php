@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Komunitas Jendela'),
     'base_domain' => env('APP_BASE_DOMAIN'),
     /*
     |--------------------------------------------------------------------------

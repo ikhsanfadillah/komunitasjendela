@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attendance;
 use App\Models\Subbranch;
 use App\Models\Event;
 use App\Models\User;
@@ -50,6 +51,7 @@ class VolunteerAttendanceController extends Controller
         }
         return redirect()->back()->with($this->flashMessage('error','Successfully Present In Perpus '.$mSubbranch->name));
     }
+
     public function multiple(Request $request)
     {
         foreach ($request->volunteers as $volunteer) {
@@ -81,26 +83,53 @@ class VolunteerAttendanceController extends Controller
         return redirect()->back()->with($this->flashMessage('success','Successfully insert attendaces'));
     }
     public function selfAttending(Request $request){
+        $mEvent = Event::find($request->event_id);
         $mVolunteer = User::with('detail')
-            ->whereHas('detail', function($query) use ($request){
-                $query->where('phone', '=', str_replace(' ', '', $request->phone));
-            })->first();
-        if(empty($mVolunteer) || !Hash::check($request->password, $mVolunteer->password))
-            return redirect()->back()->with($this->flashMessage('error','incorrect phone number or password'));
+            ->where('email',$request->email)
+//            ->whereHas('detail', function($query) use ($request){
+//                $query->where('phone', '=', str_replace(' ', '', $request->phone));
+//            })
+            ->first();
 
+        if(empty($mVolunteer))
+//        if(empty($mVolunteer) || !Hash::check($request->password, $mVolunteer->password))
+        {
+            $messageSalahAutentikasi = [
+                "",
+                "Opps, Data tidak ditemukan",
+                "Data masih tidak ditemukan. Coba lagi kaka",
+                "Coba dicek kembali kaka",
+                "Sepertinya kamu lelah",
+                "Butuh Aqu# kaka?",
+                "Atau butuh perhatian?",
+                "Tenang ka, ada ka Zaki yang siap memberikan bahunya. XDD",
+                "Sudah sampe sini aja ya... Selamat beraktifitas",
+            ];
+
+            return redirect()->back()
+                ->with(["attemps" => $request->attemps])
+                ->with($this->flashMessage('error', $messageSalahAutentikasi[$request->attemps <= 8 ? $request->attemps : 3]));
+        }
+
+        // Cek apakah jangkauannya cukup
+//        $distance = Attendance::distance($mEvent->lat, $mEvent->long, $request->lat, $request->long, "K") . " Kilometers<br>";
+
+        // Cek apakah sudah absen?
         $hasAbsen = VolunteerAttendance::where('user_id',$mVolunteer->id)
             ->where('event_id',$request->event_id)
             ->where('date',date('Y-m-d'))->first();
         if($hasAbsen){
-            return redirect()->back()->with($this->flashMessage('error','Cannot present twice in the same day and same location'));
+            return redirect()->back()
+                ->with($this->flashMessage('error','Opps, sepertinya kamu sudah absen'));
         }
+
         DB::beginTransaction();
         try{
             $mVolAttendance = new VolunteerAttendance();
             $mVolAttendance->user_id = $mVolunteer->id;
             $mVolAttendance->checker_id = null;
             $mVolAttendance->event_id = $request->event_id;
-            $mVolAttendance->status = 1;
+            $mVolAttendance->status = 10;
             $mVolAttendance->date = date('Y-m-d');
             $mVolAttendance->long = $request->long;
             $mVolAttendance->lat = $request->lat;
@@ -109,14 +138,36 @@ class VolunteerAttendanceController extends Controller
             $mVolAttendance->save();
             DB::commit();
 
-            return redirect()->back()->with($this->flashMessage('success','Successfully record your presence '));
+            return redirect()->back()
+                ->with(["attemps" => 0])
+                ->with($this->flashMessage('success','Absen Berhasil, Semoga harimu menyenangkan'));
         }
         catch (Exception $e){
             DB::rollback();
-            return $e->getMessage();
-
+            return redirect()->back()
+                ->with($this->flashMessage('error','terjadi kesalahan. mohon coba kembali'));
         }
-        return redirect()->back()->with($this->flashMessage('error','terjadi kesalahan. mohon coba kembali'));
+    }
+
+    public function checked(Request $request, $id){
+
+        $mVolAttendance = VolunteerAttendance::find($id);
+        DB::beginTransaction();
+        try{
+            $mVolAttendance->status = Attendance::STATUS_PRESENT;
+            $mVolAttendance->checker_id = Auth::id();
+            $mVolAttendance->save();
+            DB::commit();
+
+            return redirect()->back()
+                ->with(["attemps" => 0])
+                ->with($this->flashMessage('success','Data berhasil di ubah'));
+        }
+        catch (Exception $e){
+            DB::rollback();
+            return redirect()->back()
+                ->with($this->flashMessage('error','terjadi kesalahan. mohon coba kembali'));
+        }
     }
     public function destroy($id){
         // delete

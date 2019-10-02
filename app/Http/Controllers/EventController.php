@@ -26,16 +26,21 @@ class EventController extends Controller
     }
 
     public function store(Request $request){
+        $vEventData = $request->validate(Event::rules());
+
         DB::beginTransaction();
         try{
             $mEvent = new Event();
-            $mEvent->name = $request->name;
-            $mEvent->slug = $request->slug;
-            $mEvent->time_type = $request->time_type;
-            $mEvent->day = json_encode($request->day);
-            $mEvent->date = $request->date;
-            $mEvent->time = $request->time;
-            $mEvent->description = $request->description;
+            $mEvent->name = $vEventData['name'];
+            $mEvent->slug = $vEventData['slug'];
+            $mEvent->lat = $vEventData['latitude'];
+            $mEvent->long = $vEventData['longitude'];
+            $mEvent->radius = 0.3;
+            $mEvent->time_type = $vEventData['time_type'];
+            $mEvent->day = json_encode($vEventData['day']);
+            $mEvent->date = $vEventData['date'];
+            $mEvent->time = $vEventData['time'];
+            $mEvent->description = $vEventData['description'] ?? "";
             $mEvent->save();
             DB::commit();
 
@@ -56,38 +61,32 @@ class EventController extends Controller
     }
 
     public function update(Request $request, $id){
-        $request->merge([
-            'nik' => str_replace(' ','',$request->nik),
-            'phone' => str_replace(' ','',$request->phone),
-            'password' => bcrypt('Jendela'.date('dmy', strtotime($request->dob)))
-        ]);
-        $vEventData = $request->validate(Event::rules($id),[
-            'city_id.required' => "You have to choose the City that ".($request->gender == 'M'? 'He' : 'She')." live in",
-            'city_id.exists' => "Sorry, the City does not exists"
-        ]);
+        $vEventData = $request->validate(Event::rules());
         DB::beginTransaction();
         try{
-
-            Event::find($id)->update($vEventData);
-
-            if(Event::find($id)->detail)
-                EventDetail::find($id)->update($vEventData);
-            else
-                EventDetail::create(array_merge($vEventData,['user_id' => $id]));
-
+            $mEvent = Event::find($id);
+            $mEvent->name = $vEventData['name'];
+            $mEvent->slug = $vEventData['slug'];
+            $mEvent->lat = $vEventData['latitude'];
+            $mEvent->long = $vEventData['longitude'];
+            $mEvent->radius = 0.3;
+            $mEvent->time_type = $vEventData['time_type'];
+            $mEvent->day = isset($vEventData['day']) ? json_encode($vEventData['day']) : NULL;
+            $mEvent->date = $vEventData['date'] ?? NULL;
+            $mEvent->time = $vEventData['time'];
+            $mEvent->description = $vEventData['description'] ?? "";
+            $mEvent->save();
             DB::commit();
-            $request->session()->flash('status', 'Successfully created Event!');
+
+            $request->session()->flash('status', 'Successfully create new Event!');
             return redirect()->route('admin.event.index');
         }
         catch (Exception $e){
             DB::rollback();
             return $e->getMessage();
+
         }
         return back();
-
-        $mEvent = Event::find($id);
-        $cities = City::All();
-        return view('pages.event.edit',['mEvent' => $mEvent]);
     }
 
     public function destroy($id){

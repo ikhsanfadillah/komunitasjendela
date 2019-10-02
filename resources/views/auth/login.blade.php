@@ -69,13 +69,6 @@
                             <div class="form-group">
                                 <button class="btn btn-primary submit-btn btn-block">Login</button>
                             </div>
-
-                            @if (Route::has('register'))
-                                <div class="text-block text-center my-3">
-                                    <span class="text-small font-weight-semibold">Not a member ?</span>
-                                    <a href="{{ route('register') }}" class="text-black text-small">Contact Zaky Wibowo</a>
-                                </div>
-                            @endif
                         </form>
                     </div>
                     <p class="mt-2 footer-text text-center">copyright © 2018 Komunitas Jendela. All rights reserved.</p>
