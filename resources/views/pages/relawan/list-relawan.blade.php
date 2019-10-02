@@ -3,19 +3,45 @@
         padding: 0.8rem 1.2rem;
     }
 </style>
+<!-- Delete item Modal -->
+<div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <form class="modal-content border-0 form-horizontal" enctype="multipart/form-data" action="{{route("admin.relawan.import")}}" method="POST">
+            @csrf
+            <div class="modal-header text-white">
+                <h5 class="modal-title">Import CSV file</h5>
+                <button type="button" class="close text-white" style="opacity:0.9;" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="mdi mdi-close"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <input type="file" class="form-control @if($errors->has("file")) is-invalid @endif" name="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, image/*" >
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="submit" class="btn btn-danger" value="Import"/>
+            </div>
+        </form><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <div class="table-navigation" style="border-width: 1px 0; border-color: #dee2e6; border-style: solid">
-    <form id="searchForm" class="form-inline">
-        <div class="mr-2">
-            <i class="mdi mdi-magnify text-muted position-absolute" style="padding: 5px 9px;"></i>
-            <input id="inptSearchVolunteer" type="text" class="form-control" style="padding-left: 30px;" placeholder="Search" aria-label="Username" aria-describedby="basic-addon1">
+    <form id="searchForm" class="d:f flex-row j-c:s-b">
+        <div class="form-inline">
+            <div class="mr-2">
+                <i class="mdi mdi-magnify text-muted position-absolute" style="padding: 5px 9px;"></i>
+                <input id="inptSearchVolunteer" type="text" class="form-control" style="padding-left: 30px;" placeholder="Search" aria-label="Username" aria-describedby="basic-addon1">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#importModal" onclick="event.preventDefault()"><span class="fa fa-file-excel-o"></span></button>
     </form>
     <div id="actionForm" action="{{ route('admin.relawan.index') }}" method="get" style="display: none">
         <form action="" class="d-inline">
             @method('DELETE')
             @csrf
-            <input  type="text" name="checkedID" class="inpCheckedID">
+            <input type="hidden" name="checkedID" class="inpCheckedID">
             <button class="btn btn-danger">Delete</button>
         </form>
         <button id="btnDeactiveUser" class="btn btn-light">Deactive</button>
@@ -37,61 +63,60 @@
             <th class="px-1"></th>
             <th>Name</th>
             <th>Email</th>
+            <th>Phone</th>
             <th>Birthdate</th>
             <th>Join Date</th>
             <th></th>
         </tr>
         </thead>
         <tbody>
-        @for($j = 0 ; $j < 7 ; $j ++ )
-            @foreach($mRelawans as $i => $mRelawan)
-            <tr>
-                <td class="pr-1" style="padding: 16px">
-                    <div class="form-check form-check-flat">
-                        <label class="form-check-label">
-                            <input type="checkbox" class="checkboxTr form-check-input" value="{{$mRelawan->id}}">
-                        </label>
-                    </div>
-                </td>
-                <td>
-                    <label class="input-toggle">
-                        <input class="isActive" name="cbxIsActive" value="{{$mRelawan->id}}" type="checkbox" value="{{$mRelawan->id}}" {{ $mRelawan->isActive ? 'checked' : '' }}>
-                        <span></span>
+        @foreach($mRelawans as $i => $mRelawan)
+        <tr>
+            <td class="pr-1" style="padding: 16px">
+                <div class="form-check form-check-flat">
+                    <label class="form-check-label">
+                        <input type="checkbox" class="checkboxTr form-check-input" value="{{$mRelawan->id}}">
                     </label>
-                </td>
-                <td class="py-1 px-1">
-                    @if($mRelawan->detail()->exists())
-                        <img src="{{ asset('images/faces/'.($mRelawan->detail->gender == App\Models\User::GENDER_MALE ? "boy" : "girl").'.png') }}" class="bg-inverse-dark" alt="image" />
-                    @else
-                        <img src="{{ asset('images/faces/boy.png') }}" class="bg-inverse-dark" alt="image" />
-                    @endif
-                </td>
-                <td>{{ $mRelawan->name }}</td>
-                <td>{{ $mRelawan->email }}</td>
+                </div>
+            </td>
+            <td>
+                <label class="input-toggle">
+                    <input class="isActive" name="cbxIsActive" value="{{$mRelawan->id}}" type="checkbox" value="{{$mRelawan->id}}" {{ $mRelawan->isActive ? 'checked' : '' }}>
+                    <span></span>
+                </label>
+            </td>
+            <td class="py-1 px-1">
+                @if($mRelawan->detail()->exists())
+                    <img src="{{ asset('images/faces/'.($mRelawan->detail->gender == App\Models\User::GENDER_MALE ? "boy" : "girl").'.png') }}" class="bg-inverse-dark" alt="image" />
+                @else
+                    <img src="{{ asset('images/faces/boy.png') }}" class="bg-inverse-dark" alt="image" />
+                @endif
+            </td>
+            <td>{{ $mRelawan->name }}</td>
+            <td>{{ $mRelawan->email }}</td>
+            <td>{{ empty($mRelawan->detail) ? "-" : $mRelawan->detail->phone }}</td>
+            <td>@isset($mRelawan->detail->dob) {{ date('M d, Y', strtotime($mRelawan->detail->dob)) }} @endisset</td>
+            <td>@isset($mRelawan->detail->dob) {{ date('M d, Y', strtotime($mRelawan->detail->join_dt)) }} @endisset</td>
+            <td>
+                <form action="{{ route('admin.relawan.destroy',$mRelawan->id) }}" method="POST">
 
-                <td>@isset($mRelawan->detail->dob) {{ date('M d, Y', strtotime($mRelawan->detail->dob)) }} @endisset</td>
-                <td>@isset($mRelawan->detail->dob) {{ date('M d, Y', strtotime($mRelawan->detail->join_dt)) }} @endisset</td>
-                <td>
-                    <form action="{{ route('admin.relawan.destroy',$mRelawan->id) }}" method="POST">
+                <div class="dropdown d-inline-block">
+                    <a class="text-dark text-center" style="font-size: 1.3em" data-offset="30" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="mdi mdi-dots-horizontal"></i>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" >
+                        <a class="dropdown-item" href="{{ route('admin.relawan.edit',['id'=>$mRelawan->id]) }}">
+                            <i class="mdi mdi-pencil"></i> Edit Relawan</a>
 
-                    <div class="dropdown d-inline-block">
-                        <a class="text-dark text-center" style="font-size: 1.3em" data-offset="30" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="mdi mdi-dots-horizontal"></i>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" >
-                            <a class="dropdown-item" href="{{ route('admin.relawan.edit',['id'=>$mRelawan->id]) }}">
-                                <i class="mdi mdi-pencil"></i> Edit Relawan</a>
-
-                            @method('DELETE')
-                            @csrf
-                            <button class="dropdown-item" type="submit"><i class="mdi mdi-delete-empty"></i> Delete Relawan</button>
-                        </div>
+                        @method('DELETE')
+                        @csrf
+                        <button class="dropdown-item" type="submit"><i class="mdi mdi-delete-empty"></i> Delete Relawan</button>
                     </div>
-                    </form>
-                </td>
-            </tr>
+                </div>
+                </form>
+            </td>
+        </tr>
         @endforeach
-        @endfor
         </tbody>
     </table>
 </form>

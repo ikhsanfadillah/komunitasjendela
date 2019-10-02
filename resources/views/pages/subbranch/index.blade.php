@@ -39,10 +39,10 @@
                                         <td>{{ $mSubbranch->id }}</td>
                                         <td class="text-capitalize">{{ $mSubbranch->name }}</td>
                                         <td class="text-capitalize">
-                                            <a href="{{ route('admin.branch.index',['id'=>$mSubbranch->branch->id]) }}">{{ $mSubbranch->branch->name }}</a></td>
+                                            <a href="{{ route('admin.branch.edit',['id'=>$mSubbranch->branch->id]) }}">{{ $mSubbranch->branch->name }}</a></td>
                                         <td class="text-right">
-                                            <a href="{{ route('admin.subbranch.edit',['id'=>$mSubbranch->id])}}" class="text-dark" style="font-size: 1.7em"><i class="mdi mdi-pencil"></i></a>
-                                            <a href="#" class="text-dark" style="font-size: 1.7em"
+                                            <a href="{{ route('admin.subbranch.edit',['id'=>$mSubbranch->id])}}" class="text-dark"><i class="mdi mdi-pencil"></i></a>
+                                            <a href="#" class="text-dark"
                                                onclick="event.preventDefault(); document.getElementById('delete-user-form').submit();">
                                                 <i class="mdi mdi-delete-empty"></i></a>
 

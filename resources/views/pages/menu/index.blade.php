@@ -21,7 +21,7 @@
                                 <thead>
                                 <tr>
                                     <th>
-                                        User
+                                        #
                                     </th>
                                     <th>
                                         Name
@@ -34,7 +34,7 @@
                                 <tbody>
                                 @foreach($mMasterMenus as $i => $mMasterMenu)
                                     <tr>
-                                        <td>{{ $mMasterMenu->id }}</td>
+                                        <td>{{ $i+1 }}</td>
                                         <td>{{ $mMasterMenu->name }}</td>
                                         <td class="text-right">
 

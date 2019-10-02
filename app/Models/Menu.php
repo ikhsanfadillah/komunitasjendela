@@ -44,8 +44,8 @@ class Menu extends Model
                         <span>
                             <span class='{$item->icon}'></span>
                             {$item->text} 
-                            <span class='d-none d-sm-block' style='margin-left:5px; font-size: 0.8em; font-weight: initial'>
-                            ".substr(route($item->route),strlen(url('/')))."</span> 
+                            <span class='d-none d-sm-inline' style='margin-left:5px; font-size: 0.8em; font-weight: initial'>
+                            ".substr(route($item->route),strlen(url('/')))." &nbsp;</span> 
                         </span>                           
                         <div class='nested-list-buttonsgroup'>
                             <a href='#' class='btn btn-xs btn-outline-primary editMenuItem'>

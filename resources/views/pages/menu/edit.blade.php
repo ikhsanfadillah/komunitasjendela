@@ -2,13 +2,10 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{asset('vendors/nestable/nestable.css')}}">
-    <link rel="stylesheet" href="{{asset('vendors/bootstrap-select-1.13.9/dist/css/bootstrap-select.min.css')}}">
 @endsection
 
 @section('scripts')
     <script src="{{asset('vendors/nestable/jquery.nestable.js')}}"></script>
-    <script src="{{asset('vendors/bootstrap-select-1.13.9/dist/js/bootstrap-select.min.js')}}"></script>
-    <script src="{{asset('vendors/bootstrap-select-1.13.9/dist/js/i18n/defaults-id_ID.js')}}"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -87,9 +84,13 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title d-inline-block">Menu Builder</h4>
-                        <a href="#menuModal" class="btn btn-primary btn-sm  d-inline-block float-right text-white" data-toggle="modal"><span
+                        <a href="#menuModal" class="btn btn-primary btn-sm  d-inline-block float-right" data-toggle="modal"><span
                                     class="mdi mdi-plus .d-block d-sm-none"></span>
                             <span class="d-none d-sm-block createMenuItem">Add Menu Item</span> </a>
+                        
+                        <a href="" class="btn btn-success btn-sm d-inline-block float-right mr-2">
+                            <span class="mdi mdi-refresh "></span> </a>
+                        
                         <div class="dd" id="nestable">
                             {!! $menu !!}
                         </div>
@@ -125,10 +126,12 @@
                     </div>
                     <div class="form-group">
                         <label for="inpRoute" class="col-12 control-label">Route name</label>
-                        <select id="inpRoute" name="route" class="form-control">
+                        <select id="inpRoute" name="route" class="form-control selectpicker dropup " data-live-search="true" title="Route" data-container="body">
                             <option value=""></option>
                             <?php foreach (\Route::getRoutes() as $route) {
-                                if(strpos($route->getName(),'admin') !== false) { ?>
+                                if(strpos($route->getName(),'admin') !== false &&
+                                in_array('GET',$route->methods) &&
+                                strpos($route->uri(),'{') === false ){ ?>
                                     <option value="{{ $route->getName() }}" data-tokens="ketchup mustard"> {{$route->getName()}} </option>
                                 <?php }
                             } ?>

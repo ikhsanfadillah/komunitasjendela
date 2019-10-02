@@ -28,7 +28,7 @@
         @endif
     </div>
 
-    <div class="form-group">
+    <div class="form-group d-none">
         <label for="relawanNIK">NIK</label>
         <input type="text" id="relawanNIK" name="nik" placeholder="NIK" value="{{ old('nik') }}"
                class="cleave-nik form-control @if($errors->has('nik')) is-invalid @endif">
@@ -38,7 +38,7 @@
     </div>
 
     <div class="form-group">
-        <label for="relawanPhone">Phone</label>
+        <label for="relawanPhone">Phone<i class="text-danger">*</i></label>
         <input type="text" id="relawanPhone" name="phone" placeholder="Phone" value="{{ old('phone') }}"
                class="cleave-phone form-control @if($errors->has('phone')) is-invalid @endif">
         @if($errors->has('phone'))
@@ -80,7 +80,7 @@
 
     <div class="form-group">
         <label for="relawanCity">City</label>
-        <select id="relawanCity" name="city_id" class="form-control @if($errors->has('city_id')) is-invalid @endif">
+        <select data-live-search="true" title="Subbranch..." id="relawanCity" name="city_id" class="selectpicker form-control @if($errors->has('city_id')) is-invalid @endif">
             <option selected disabled>Choose Location...</option>
             @foreach(App\Models\City::All() as $city)
                 <option value="{{ $city->id }}" {{ (old('city_id') == $city->id ? "selected":"") }}>{{ $city->name }}</option>
@@ -119,8 +119,6 @@
 
         var cleaveNIK = new Cleave('.cleave-nik',{
             numericOnly: true,
-            blocks: [4,4,4,4],
-            delimiters: [" "]
         });
         var cleavePhone = new Cleave('.cleave-phone',{
             numericOnly: true,

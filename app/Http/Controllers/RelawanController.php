@@ -8,8 +8,10 @@ use App\Models\Userdetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Session;
+use App\Imports\UsersImport;
+use Maatwebsite\Excel\Facades\Excel;
 
-
+use Illuminate\Support\Facades\Route;
 class RelawanController extends Controller
 {
     public function index(){
@@ -32,7 +34,7 @@ class RelawanController extends Controller
     public function store(Request $request){
 
         $request->merge([
-            'nik' => str_replace(' ','',$request->nik),
+            'nik' => str_replace(' ','',$request->nik) ?: null,
             'phone' => str_replace(' ','',$request->phone),
             'password' => bcrypt('Jendela'.date('dmy', strtotime($request->dob)))
             ]);
@@ -74,7 +76,6 @@ class RelawanController extends Controller
         try{
 
             User::find($id)->update($vUserData);
-
             if(User::find($id)->detail)
                 UserDetail::find($id)->update($vUserData);
             else
@@ -106,5 +107,15 @@ class RelawanController extends Controller
         catch (\Exception $e) {
             return $e->getMessage();
         }
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:csv,xls,xlsx'
+        ]);
+        
+        $data = Excel::import(new UsersImport, request()->file('file'));
+        return back()->with('success', 'Insert Record successfully.');
     }
 }

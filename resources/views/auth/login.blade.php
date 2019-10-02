@@ -23,7 +23,6 @@
 <div class="container-scroller">
     <div class="container-fluid page-body-wrapper full-page-wrapper auth-page">
         <div class="content-wrapper d-flex align-items-center auth auth-bg-1 theme-one">
-
             <div class="row w-100">
                 <div class="col-lg-4 mx-auto">
                     <div class="auto-form-wrapper" style="padding-top: 20px; background-color: rgba(255,255,255,0.9)">
@@ -37,29 +36,14 @@
                         <!-- INPUT EMAIL -->
                             <div class="form-group">
                                 <label class="label">Email</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Email" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-                                    <div class="input-group-append">
-                                      <span class="input-group-text">
-                                        <i class="mdi mdi-check-circle-outline"></i>
-                                      </span>
-                                    </div>
-                                </div>
-
+                                <input type="text" class="form-control" placeholder="Email" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
                             </div>
                             <!-- END INPUT EMAIL -->
 
                             <!-- INPUT PASSWORD -->
                             <div class="form-group">
                                 <label class="label">Password</label>
-                                <div class="input-group">
-                                    <input id="password" type="password" class="form-control" placeholder="*********" name="password" required autocomplete="current-password">
-                                    <div class="input-group-append">
-                                      <span class="input-group-text">
-                                        <i class="mdi mdi-check-circle-outline"></i>
-                                      </span>
-                                    </div>
-                                </div>
+                                <input id="password" type="password" class="form-control" placeholder="*********" name="password" required autocomplete="current-password">
                             </div>
                             <!-- END INPUT PASSWORD -->
                             <div class="form-group d-flex justify-content-between">
@@ -85,13 +69,6 @@
                             <div class="form-group">
                                 <button class="btn btn-primary submit-btn btn-block">Login</button>
                             </div>
-
-                            @if (Route::has('register'))
-                                <div class="text-block text-center my-3">
-                                    <span class="text-small font-weight-semibold">Not a member ?</span>
-                                    <a href="{{ route('register') }}" class="text-black text-small">Contact Our Zaky Wibowo</a>
-                                </div>
-                            @endif
                         </form>
                     </div>
                     <p class="mt-2 footer-text text-center">copyright © 2018 Komunitas Jendela. All rights reserved.</p>
